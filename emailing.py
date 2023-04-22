@@ -1,3 +1,4 @@
+import glob
 import imghdr
 import smtplib
 from email.message import EmailMessage
@@ -6,6 +7,7 @@ import os
 PASSWORD = os.getenv("PASSforsecondarygmail")
 SENDER = "5mindisc@gmail.com"
 RECEIVER = "5mindisc@gmail.com"
+
 
 def send_email(image_path):
     email_message = EmailMessage()
@@ -22,6 +24,7 @@ def send_email(image_path):
     gmail.login(SENDER, PASSWORD)
     gmail.sendmail(SENDER,RECEIVER, email_message.as_string())
     gmail.quit()
+
 
 # if __name__ == "__main__":
 #     send_email("")
