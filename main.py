@@ -18,6 +18,10 @@ def clean_folder():
     for image in images:
         os.remove(image)
 
+# email_sent = False
+#
+# def change_status():
+#     email_sent = True
 
 while True:
     status = 0
@@ -60,7 +64,7 @@ while True:
 
     if status_list[0] == 1 and status_list[1] == 0:
         email_thread = Thread(target=send_email, args=(image_with_object,))  # Thread definition
-        email_thread.daemon = True
+        email_thread.daemon = False # so even if the camera is closed the email is sent out
 
         email_thread.start()  # Thread call
 

@@ -1,4 +1,3 @@
-import glob
 import imghdr
 import smtplib
 from email.message import EmailMessage
@@ -24,7 +23,7 @@ def send_email(image_path):
     gmail.login(SENDER, PASSWORD)
     gmail.sendmail(SENDER,RECEIVER, email_message.as_string())
     gmail.quit()
-
+    print("Email Sent")
 
 # if __name__ == "__main__":
 #     send_email("")
