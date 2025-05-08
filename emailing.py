@@ -1,12 +1,11 @@
-import imghdr
+import filetype
 import smtplib
 from email.message import EmailMessage
 import os
 
-PASSWORD = os.getenv("PASSforsecondarygmail")
-SENDER = "5mindisc@gmail.com"
-RECEIVER = "5mindisc@gmail.com"
-
+PASSWORD = "YourPassword"  # os.getenv("PASSforsecondarygmail")
+SENDER = "SenderEmail"
+RECEIVER = "ReceiverEmail"
 
 def send_email(image_path):
     email_message = EmailMessage()
@@ -15,15 +14,21 @@ def send_email(image_path):
 
     with open(image_path, "rb") as file:
         content = file.read()
-    email_message.add_attachment(content, maintype="image", subtype = imghdr.what(None, content))
+        kind = filetype.guess(content)
 
-    gmail = smtplib.SMTP("smtp.gmail.com", 587)
-    gmail.ehlo()
-    gmail.starttls()
-    gmail.login(SENDER, PASSWORD)
-    gmail.sendmail(SENDER,RECEIVER, email_message.as_string())
-    gmail.quit()
+    if kind is None or kind.mime.split('/')[0] != 'image':
+        raise ValueError("Not a valid image file")
+
+    email_message.add_attachment(
+        content,
+        maintype="image",
+        subtype=kind.extension  # like 'jpeg', 'png', etc.
+    )
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as gmail:
+        gmail.ehlo()
+        gmail.starttls()
+        gmail.login(SENDER, PASSWORD)
+        gmail.sendmail(SENDER, RECEIVER, email_message.as_string())
+
     print("Email Sent")
-
-# if __name__ == "__main__":
-#     send_email("")

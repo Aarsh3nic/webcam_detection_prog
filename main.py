@@ -30,7 +30,7 @@ while True:
     gray_frame_gau = cv2.GaussianBlur(gray_frame, (21, 21), 0)  # Here (21, 21) is the amount of blur
 
     if first_frame is None:
-        first_frame = gray_frame_gau
+        first_frame = gray_frame_gau #To assign the first frame if not done already
         continue
 
     delta_frame = cv2.absdiff(first_frame, gray_frame_gau)  # To show the difference between 2 frames
@@ -48,11 +48,11 @@ while True:
         x, y, w, h = cv2.boundingRect(contour)
         rectangle = cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
         # Here (x,y),(x+w, y+h) are 2 diagonal corners of the same rectangle
-        # (0, 255, 0) is for (R,G,B) so the color of rect will be GREEN
+        # (0, 255, 0) is for (B,G,R) so the color of rect will be GREEN
         # Last arg - 3 is the width of the border
 
         if rectangle.any():
-            status = 1
+            status = 1 #object found
             cv2.imwrite(f"images/{count}.png", frame)
             count = count + 1
             all_images = glob.glob("images/*.png")
@@ -62,7 +62,7 @@ while True:
     status_list.append(status)
     status_list = status_list[-2:]
 
-    if status_list[0] == 1 and status_list[1] == 0:
+    if status_list[0] == 1 and status_list[1] == 0: #object has just exit from the frame
         email_thread = Thread(target=send_email, args=(image_with_object,))  # Thread definition
         email_thread.daemon = False # so even if the camera is closed the email is sent out
 
